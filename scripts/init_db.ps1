@@ -78,7 +78,7 @@ if (-not $env:SKIP_DOCKER) {
 Write-Host "Postgres is up and running on port $DB_PORT - running migrations now!" -ForegroundColor Green
 
 # Set DATABASE_URL environment variable and run migrations
-$DATABASE_URL = "postgres://$($APP_USER):$($APP_USER_PWD)@host.docker.internal:$($DB_PORT)/$($APP_DB_NAME)"
+$DATABASE_URL = "postgres://$($APP_USER):$($APP_USER_PWD)@localhost:$($DB_PORT)/$($APP_DB_NAME)"
 sqlx database create --database-url $DATABASE_URL
 sqlx migrate run --database-url $DATABASE_URL
 
