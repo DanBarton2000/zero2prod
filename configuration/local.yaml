@@ -2,3 +2,4 @@ application:
   host: 127.0.0.1
 database:
   host: "host.docker.internal"
+  require_ssl: false
