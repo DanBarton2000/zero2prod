@@ -37,7 +37,7 @@ impl DatabaseSettings {
         PgConnectOptions::new()
             .host(&self.host)
             .username(&self.username)
-            .password(&self.password.expose_secret())
+            .password(self.password.expose_secret())
             .port(self.port)
             .ssl_mode(ssl_mode)
             .database(&self.database_name)
@@ -76,6 +76,7 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
 pub enum Environment {
     Local,
     Production,
+    GitHub,
 }
 
 impl Environment {
@@ -83,6 +84,7 @@ impl Environment {
         match self {
             Environment::Local => "local",
             Environment::Production => "production",
+            Environment::GitHub => "github",
         }
     }
 }
@@ -94,6 +96,7 @@ impl TryFrom<String> for Environment {
         match s.to_lowercase().as_str() {
             "local" => Ok(Self::Local),
             "production" => Ok(Self::Production),
+            "github" => Ok(Self::GitHub),
             other => Err(format!(
                 "{} is not a supported environment. Use either `local` or `production`.",
                 other

@@ -17,7 +17,7 @@ env:
   APP_USER: app
   APP_USER_PWD: secret
   APP_DB_NAME: newsletter
-  APP_ENVIRONMENT: production
+  APP_ENVIRONMENT: github
 
 # A workflow run is made up of one or more jobs, which run in parallel by default
 # Each job runs in a runner environment specified by runs-on
