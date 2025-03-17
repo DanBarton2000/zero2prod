@@ -21,13 +21,13 @@ impl AsRef<str> for SubscriberEmail {
 
 #[cfg(test)]
 mod tests {
+    use super::SubscriberEmail;
+    use claims::assert_err;
     use fake::faker::internet::en::SafeEmail;
     use fake::Fake;
-    use claims::assert_err;
     use quickcheck::Gen;
     use rand::rngs::StdRng;
     use rand::SeedableRng;
-    use super::SubscriberEmail;
 
     // Both `Clone` and `Debug` are required by `quickcheck`
     #[derive(Debug, Clone)]
@@ -43,7 +43,9 @@ mod tests {
     }
 
     #[quickcheck_macros::quickcheck]
-    fn valid_emails_are_parsed_successfully(valid_email: ValidEmailFixture) -> bool {
+    fn valid_emails_are_parsed_successfully(
+        valid_email: ValidEmailFixture,
+    ) -> bool {
         SubscriberEmail::parse(valid_email.0).is_ok()
     }
 
