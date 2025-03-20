@@ -1,3 +1,8 @@
+param
+(
+    [bool]$SkipDocker = $false
+)
+
 # Enable verbose output
 $VerbosePreference = "Continue"
 
@@ -30,7 +35,7 @@ $APP_DB_NAME = $env:APP_DB_NAME
 if (-not $APP_DB_NAME) { $APP_DB_NAME = 'newsletter' }
 
 # Allow to skip Docker if a dockerized Postgres database is already running
-if (-not $env:SKIP_DOCKER) {
+if (-not $SkipDocker) {
     # Check if a postgres container is running
     $RUNNING_POSTGRES_CONTAINER = docker ps --filter 'name=postgres' --format '{{.ID}}'
 
