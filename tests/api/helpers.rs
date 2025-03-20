@@ -47,16 +47,26 @@ impl TestApp {
 pub async fn spawn_app() -> TestApp {
     LazyLock::force(&TRACING);
 
-    let mut configuration =
-        get_configuration().expect("Failed to read configuration.");
-    configuration.database.database_name = Uuid::new_v4().to_string();
+    // Randomise configuration to ensure test isolation
+    let configuration = {
+        let mut c = get_configuration().expect("Failed to read configuration.");
+        // Use a different database for each test case
+        c.database.database_name = Uuid::new_v4().to_string();
+        // Use a random OS port
+        c.application.port = 0;
+        c
+    };
 
+    // Create and migrate the database
+    configure_database(&configuration.database).await;
+
+    // Launch the application as a background task
     let application = Application::build(configuration.clone())
         .await
         .expect("Failed to build application.");
-
-    let address = format!("http://127.0.0.1:{}", application.port());
+    let address = format!("http://localhost:{}", application.port());
     let _ = tokio::spawn(application.run_until_stopped());
+
     TestApp {
         address,
         db_pool: get_connection_pool(&configuration.database),
